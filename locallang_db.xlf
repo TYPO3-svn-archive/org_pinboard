@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-06-23T15:28:33Z" product-name="org_pinboard">
+		<header/>
+		<body>
+			<trans-unit id="tx_org_pinboardcat">
+				<source>Pinboard Category</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboardcat.title">
+				<source>Pinboard Category</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard">
+				<source>Pinboard Entry</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.datetime">
+				<source>Datetime</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.archivedate">
+				<source>Archive date</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.author">
+				<source>Author</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.fe_user">
+				<source>Frontend User</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.title">
+				<source>Pinboard Entry</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.subtitle">
+				<source>Subheader</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.bodytext">
+				<source>Bodytext</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.image">
+				<source>Images</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.imagecaption">
+				<source>Captions (one line per image)</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.tx_org_pinboardcat">
+				<source>Pinboard Category</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
