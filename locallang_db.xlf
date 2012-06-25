@@ -4,13 +4,13 @@
 		<header/>
 		<body>
 			<trans-unit id="tx_org_pinboardcat">
-				<source>Pinboard Category</source>
+				<source>Pinboard: Category</source>
 			</trans-unit>
 			<trans-unit id="tx_org_pinboardcat.title">
 				<source>Pinboard Category</source>
 			</trans-unit>
 			<trans-unit id="tx_org_pinboard">
-				<source>Pinboard Entry</source>
+				<source>Pinboard: Entry</source>
 			</trans-unit>
 			<trans-unit id="tx_org_pinboard.datetime">
 				<source>Datetime</source>

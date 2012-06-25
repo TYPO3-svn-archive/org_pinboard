@@ -21,7 +21,7 @@ $TCA['tx_org_pinboardcat'] = array(
 	'feInterface' => $TCA['tx_org_pinboardcat']['feInterface'],
 	'columns' => array(
 		'sys_language_uid' => $TCA['tt_content']['columns']['sys_language_uid'],
-		'l10n_parent' => array(		
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude'     => 1,
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
@@ -51,8 +51,8 @@ $TCA['tx_org_pinboardcat'] = array(
 			'exclude' => 0,
 			'label'   => 'LLL:EXT:org_pinboard/locallang_db.xml:tx_org_pinboardcat.title',
 			'config'  => array(
-				'type' => 'input',	
-				'size' => '30',	
+				'type' => 'input',
+				'size' => '30',
 				'eval' => 'trim,required',
 			),
 		),
@@ -268,7 +268,7 @@ $TCA['tx_org_pinboard'] = array(
 	),
 );
 
-	//  field property adjustmen
+	//  field property adjustment
 $TCA['tx_org_pinboard']['columns']['datetime']['config']['size']    = 13;
 $TCA['tx_org_pinboard']['columns']['datetime']['config']['eval']   .= ',required';
 $TCA['tx_org_pinboard']['columns']['archivedate']['config']['size'] = 13;

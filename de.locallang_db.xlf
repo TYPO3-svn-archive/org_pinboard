@@ -4,16 +4,16 @@
 		<header/>
 		<body>
 			<trans-unit id="tx_org_pinboardcat" approved="yes">
-				<source>Pinboard Category</source>
-				<target>Pinnwand-Kategorie</target>
+				<source>Pinboard: Category</source>
+				<target>Pinnwand: Kategorie</target>
 			</trans-unit>
 			<trans-unit id="tx_org_pinboardcat.title" approved="yes">
 				<source>Pinboard Category</source>
 				<target>Pinnwand-Kategorie</target>
 			</trans-unit>
 			<trans-unit id="tx_org_pinboard" approved="yes">
-				<source>Pinboard Entry</source>
-				<target>Pinnwand-Eintrag</target>
+				<source>Pinboard: Entry</source>
+				<target>Pinnwand: Eintrag</target>
 			</trans-unit>
 			<trans-unit id="tx_org_pinboard.datetime" approved="yes">
 				<source>Datetime</source>
