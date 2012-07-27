@@ -27,8 +27,8 @@ $TCA['tx_org_pinboard'] = array(
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled'  => 'hidden',
-			'starttime' => 'starttime',
-			'endtime'   => 'endtime',
+		##	'starttime' => 'starttime',
+		##	'endtime'   => 'endtime',
 			'fe_group'  => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',

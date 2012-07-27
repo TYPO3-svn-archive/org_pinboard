@@ -91,10 +91,11 @@ CREATE TABLE tx_org_pinboard (
 	image_noRows tinyint(3) unsigned DEFAULT '0' NOT NULL,
 	image_effects tinyint(3) unsigned DEFAULT '0' NOT NULL,
 	image_compression tinyint(3) unsigned DEFAULT '0' NOT NULL,
+	image_frames tinyint(3) unsigned DEFAULT '0' NOT NULL,
 	altText text,
 	titleText text,
 	media text,
-	mediaText text,
+	mediacaption text,
 	tx_org_pinboardcat int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),

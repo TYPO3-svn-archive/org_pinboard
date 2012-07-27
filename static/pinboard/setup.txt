@@ -1,0 +1,329 @@
+/**
+ *	plugin.tx_browser_pi1
+ *		views
+ *			1601: +Org: Pinboard
+*/
+
+plugin.tx_browser_pi1 {
+	template {
+		extensions {
+			org {
+				pinboard {
+					name     = Org: Pinboard
+					file     = EXT:org_pinboard/res/tpl/pinboard/1601/default.tmpl.html
+					csvViews = 1601
+				}
+			}
+		}
+	}
+
+	views {
+		list {
+			1601 = +Org: Pinboard
+			1601 {
+				name    = +Org: Pinboard
+				showUid = pinboardUid
+				displayList < plugin.tx_browser_pi1.displayList
+			##	displayList {
+			##		selectBox_orderBy.display = 0
+			##	}
+				marker {
+					my_pinboardcat_prefix = TEXT
+					my_pinboardcat_prefix {
+						value   = Pinnwand
+						lang.en = Pinboard
+						lang.de < .value
+					}
+				}
+				select (
+					tx_org_pinboard.crdate,
+					tx_org_pinboard.title,
+					tx_org_pinboard.datetime,
+					tx_org_pinboard.author,
+					tx_org_pinboard.image,
+					tx_org_pinboardcat.title
+				)
+			##	select := appendString(,tx_org_pinboard.subtitle)
+/*
+				andWhere (
+					(tx_org_pinboard.archivedate = 0
+						OR tx_org_pinboard.archivedate > UNIX_TIMESTAMP())
+				)
+*/
+#andWhere = tx_org_pinboard.archivedate > 1341833219
+				orderBy (
+					tx_org_pinboard.crdate DESC
+				)
+				csvLinkToSingleView = tx_org_pinboard.title
+
+				tx_org_pinboard {
+					crdate {
+						strftime = %d.%b.%Y, %H:%M
+					}
+				##	subtitle {
+				##		wrap = |
+				##	}
+				}
+
+				filter {
+					tx_org_pinboard {
+						datetime < plugin.tx_browser_pi1.displayList.master_templates.selectbox
+						datetime {
+							first_item {
+##  @ToDo: stdWrap is deprecated -> use cObject
+								stdWrap {
+									data = LLL:EXT:org/locallang_db.xml:filter_phrase.period
+								}
+							}
+							wrap = <span class="category_menu">|</span>
+							wrap {
+								item {
+									//display_without_any_hit = 1
+									stdWrap {
+										htmlSpecialChars = 0
+										crop >
+									}
+								}
+							}
+							order.field = uid
+							area < plugin.tx_browser_pi1.displayList.master_templates.areas.sample_period
+							area {
+								interval {
+									case = year
+									monthXYZ {
+										times_stdWrap {
+											value = 3
+										}
+										value_stdWrap {
+											// %Y: full year like 2009
+											strftime = %Y
+										}
+									}
+								}
+							}
+						}
+					}
+					tx_org_pinboardcat {
+						title < plugin.tx_browser_pi1.displayList.master_templates.selectbox
+						title {
+							first_item {
+								stdWrap {
+									data = LLL:EXT:org/locallang_db.xml:filter_phrase.newscat
+								}
+							}
+							wrap = <span class="selectbox">|</span>
+							wrap {
+								item {
+									stdWrap {
+										crop = 30 | ... | 1
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		single {
+			1601 = +Org: Pinboard
+			1601 {
+				displaySingle < plugin.tx_browser_pi1.displaySingle
+				displaySingle {
+					image.file >
+				}
+				marker < plugin.tx_browser_pi1.views.list.1601.marker
+				marker {
+					my_pinboard_author = TEXT
+					my_pinboard_author {
+						value   = Autor
+						lang.en = Author
+						lang.de < .value
+					}
+					my_pinboard_datetime = TEXT
+					my_pinboard_datetime {
+						value   = Veröffentlicht am
+						lang.en = Published
+						lang.de < .value
+					}
+					my_pinboard_archivedate = TEXT
+					my_pinboard_archivedate {
+						value   = Verfällt am
+						lang.en = Expires
+						lang.de < .value
+					}
+##					my_listview_page = TEXT
+##					my_listview_page {
+##						value = All News &raquo;
+##						lang.de = Alle Nachrichten &raquo;
+##						typolink {
+##							parameter = {$plugin.org.pages.news}
+##							title {
+##								value = All News
+##								lang.de = Alle Nachrichten
+##							}
+##						}
+##					}
+##					my_singleview_title = TEXT
+##					my_singleview_title {
+##						value   = News
+##						lang.de = Nachricht
+##						wrap    = <div class="header01">|</div>
+##					}
+				}
+				select (
+					tx_org_pinboard.datetime,
+					tx_org_pinboard.archivedate,
+					tx_org_pinboard.author,
+					tx_org_pinboard.title,
+					tx_org_pinboard.subtitle,
+					tx_org_pinboard.bodytext,
+
+					tx_org_pinboard.image,
+					tx_org_pinboard.imagewidth,
+					tx_org_pinboard.imageheight,
+					tx_org_pinboard.imageorient,
+					tx_org_pinboard.imagecaption,
+					tx_org_pinboard.imagecols,
+					tx_org_pinboard.imageborder,
+					tx_org_pinboard.imagecaption_position,
+					tx_org_pinboard.image_link,
+					tx_org_pinboard.image_zoom,
+					tx_org_pinboard.image_noRows,
+					tx_org_pinboard.image_effects,
+					tx_org_pinboard.image_compression,
+					tx_org_pinboard.image_frames,
+					tx_org_pinboard.altText,
+					tx_org_pinboard.titleText,
+
+					tx_org_pinboard.media,
+					tx_org_pinboard.mediacaption,
+					tx_org_pinboardcat.title
+				)
+				tx_org_pinboard {
+					datetime.strftime = %d.%b.%Y, %H:%M
+					archivedate.strftime < .datetime.strftime
+						// title, address and image
+					title < tt_content.image.20
+					title {
+						imgList.field >
+						imgList = ###TX_ORG_PINBOARD.IMAGE###
+						imgPath = uploads/tx_org/
+						1 {
+							file {
+								width.field >
+								width  = ###TX_ORG_PINBOARD.IMAGEWIDTH###
+								height = ###TX_ORG_PINBOARD.IMAGEHEIGHT###
+							}
+							altText.field >
+							altText         = ###TX_ORG_PINBOARD.ALTTEXT###
+							titleText.field >
+							titleText       = ###TX_ORG_PINBOARD.TITLETEXT###
+							imageLinkWrap {
+								ifEmpty {
+									typolink.parameter.field >
+									typolink.parameter       = ###TX_ORG_PINBOARD.IMAGE_LINK###
+								}
+								typolink.parameter.field >
+								typolink.parameter       = ###TX_ORG_PINBOARD.IMAGE_LINK###
+								enable.field             >
+								enable                   = ###TX_ORG_PINBOARD.IMAGE_ZOOM###
+								width                    = 1000;
+								height                   = 800m;
+								//JSwindow = 0
+							}
+						}
+						textPos.field           >
+						textPos                 = ###TX_ORG_PINBOARD.IMAGEORIENT###
+						equalH                  >
+						image_compression.field >
+						image_compression       = ###TX_ORG_PINBOARD.IMAGE_COMPRESSION###
+						image_effects.field     >
+						image_effects           = ###TX_ORG_PINBOARD.IMAGE_EFFECTS###
+						noRows.field            >
+						noRows                  = ###TX_ORG_PINBOARD.IMAGE_NOROWS###
+						cols.field              >
+						cols                    = ###TX_ORG_PINBOARD.IMAGECOLS###
+						border.field            >
+						border 	                = ###TX_ORG_PINBOARD.IMAGEBORDER###
+						caption.1.field         >
+						caption.1.value         = ###TX_ORG_PINBOARD.IMAGECAPTION###
+						captionAlign.field      >
+						captionAlign            = ###TX_ORG_PINBOARD.IMAGECAPTION_POSITION###
+						layout {
+							key.field >
+							key = ###TX_ORG_PINBOARD.IMAGEORIENT###
+							default.value = <div class="csc-textpic csc-textpic-center csc-textpic-above###CLASSES###">###IMAGES###</div><div class="csc-textpic-clear"><!-- --></div>###TEXT###
+						}
+						stdWrap {
+							prefixComment >
+						}
+							// title, address
+						text {
+							required = 1
+								// bodytext
+							10 = TEXT
+							10 {
+								required = 1
+								value = ###TX_ORG_PINBOARD.TITLE###
+								wrap  = <h1 class="news_title csc-firstHeader">|</h1>
+							}
+							20 = TEXT
+							20 {
+								required = 1
+								value = ###TX_ORG_PINBOARD.SUBTITLE###
+								wrap  = <h2 class="news_subtitle">|</h2>
+							}
+							30 = COA
+							30 {
+								stdWrap.parseFunc < lib.parseFunc_RTE
+/*
+								10 = TEXT
+								10 {
+									value      = ###TX_ORG_PINBOARD.DATETIME###
+									strftime   = %d. %b. %Y
+									noTrimWrap = |<span class="datetime">| &ndash;</span> |
+								}
+*/
+								20 = TEXT
+								20 {
+									value = ###TX_ORG_PINBOARD.BODYTEXT###
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	_LOCAL_LANG {
+		default {
+			list_mode_1601            = Pinboard
+			list_mode_1601_titleTag   = Pinboard
+			list_mode_1601_keywords   = Pinboard
+			list_mode_1601_summary    = Pinboard
+			single_mode_1601_titleTag = Pinboard - ###TX_ORG_PINBOARD.TITLE###
+		##	single_mode_1601_keywords = Pinboard, ###TX_ORG_PINBOARD.KEYWORDS###
+		##	single_mode_1601_summary  = Pinboard: ###TX_ORG_PINBOARD.DESCRIPTION###
+		}
+		de {
+			list_mode_1601_titleTag   = Pinnwand
+			list_mode_1601_keywords   = Pinnwand
+			list_mode_1601_summary    = Pinnwand
+			single_mode_1601_titleTag = Pinnwand - ###TX_ORG_PINBOARD.TITLE###
+		##	single_mode_1601_keywords = Pinnwand, ###TX_ORG_PINBOARD.KEYWORDS###
+		##	single_mode_1601_summary  = Pinnwand: ###TX_ORG_PINBOARD.DESCRIPTION###
+		}
+	}
+}
+
+
+	////////////////////////////////////////
+	//
+	// Header Comment
+
+page.config.headerComment (
+				TYPO3-Programmierung: die-netzmacher.de
+)
+	// Header Comment

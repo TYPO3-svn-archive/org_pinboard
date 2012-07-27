@@ -156,6 +156,7 @@ $TCA['tx_org_pinboard'] = array(
 		'image_noRows'          => $TCA['tt_content']['columns']['image_noRows'],
 		'image_effects'         => $TCA['tt_content']['columns']['image_effects'],
 		'image_compression'     => $TCA['tt_content']['columns']['image_compression'],
+		'image_frames'          => $TCA['tt_content']['columns']['image_frames'],
 		'altText'               => $TCA['tt_content']['columns']['altText'],
 		'titleText'             => $TCA['tt_content']['columns']['titleText'],
 		'media'                 => $TCA['tt_content']['columns']['media'],
