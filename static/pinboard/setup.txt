@@ -317,13 +317,3 @@ plugin.tx_browser_pi1 {
 		}
 	}
 }
-
-
-	////////////////////////////////////////
-	//
-	// Header Comment
-
-page.config.headerComment (
-				TYPO3-Programmierung: die-netzmacher.de
-)
-	// Header Comment

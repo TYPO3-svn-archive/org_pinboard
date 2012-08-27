@@ -3,6 +3,10 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2012-06-23T15:28:33Z" product-name="org_pinboard">
 		<header/>
 		<body>
+			<trans-unit id="em.TCA_datetime_in_enablecolumns">
+				<source>datetime in enablecolumns: Enabling this option the field „Datetime” is used for access control.</source>
+			</trans-unit>
+
 			<trans-unit id="tx_org_pinboardcat">
 				<source>Pinboard: Category</source>
 			</trans-unit>

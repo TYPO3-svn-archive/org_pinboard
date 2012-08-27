@@ -16,37 +16,12 @@ $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['org']);
 $TCA['tx_org_pinboardcat'] = array(
 	'ctrl' => $TCA['tx_org_pinboardcat']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,starttime,endtime,fe_group,title'
+		'showRecordFieldList' => 'title,title_lang_ol,hidden,image,imagecaption,altText,titleText'
 	),
 	'feInterface' => $TCA['tx_org_pinboardcat']['feInterface'],
 	'columns' => array(
 		'sys_language_uid' => $TCA['tt_content']['columns']['sys_language_uid'],
-		'l10n_parent' => array(
-			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude'     => 1,
-			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
-			'config'      => array(
-				'type'  => 'select',
-				'items' => array(
-					array(
-						'',
-						0,
-					),
-				),
-				'foreign_table'       => 'tx_org_pinboardcat',
-				'foreign_table_where' => 'AND tx_org_pinboardcat.pid=###CURRENT_PID### '
-											. 'AND tx_org_pinboardcat.sys_language_uid IN (-1,0)',
-			),
-		),
-		'l10n_diffsource' => array(
-			'config' => array(
-				'type' => 'passthrough'
-			),
-		),
 		'hidden'    => $TCA['tt_content']['columns']['hidden'],
-		'starttime' => $TCA['tt_content']['columns']['starttime'],
-		'endtime'   => $TCA['tt_content']['columns']['endtime'],
-		'fe_group'  => $TCA['tt_content']['columns']['fe_group'],
 		'title'     => array(
 			'exclude' => 0,
 			'label'   => 'LLL:EXT:org_pinboard/locallang_db.xml:tx_org_pinboardcat.title',
@@ -56,22 +31,46 @@ $TCA['tx_org_pinboardcat'] = array(
 				'eval' => 'trim,required',
 			),
 		),
+		'title_lang_ol' => array (
+			'exclude' => 0,
+			'label'   => 'LLL:EXT:org/locallang_db.xml:tx_org_newscat.title_lang_ol',
+			'config'  => array(
+				'type' => 'input',
+				'size' => '30',
+				'eval' => 'trim',
+			),
+		),
+		'image'        => $TCA['tt_content']['columns']['image'],
+		'imagecaption' => $TCA['tt_content']['columns']['imagecaption'],
+		'altText'      => $TCA['tt_content']['columns']['altText'],
+		'titleText'    => $TCA['tt_content']['columns']['titleText'],
 	),
 	'types' => array(
 		'0' => array(
 			'showitem' => '
-					sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
-					title;;;;1-1-1,
+					title;;1;;1-1-1,,
+				--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.images,
+					--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.imagefiles;imagefiles,
+					--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.image_accessibility;image_accessibility,
 				--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
+					--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.visibility;visibility,
 					--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;access,
 				--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.extended',
 		),
 	),
 	'palettes' => array(
-		'access' => $TCA['tt_content']['palettes']['access'],
+		'1'      => array (
+			'showitem' => 'title_lang_ol',
+		),
+		'imagefiles'          => $TCA['tt_content']['palettes']['imagefiles'],
+		'image_accessibility' => $TCA['tt_content']['palettes']['image_accessibility'],
+		'visibility'          => array(
+			'showitem'       => '
+					hidden;;',
+			'canNotCollapse' => 1,
+		),
 	),
 );
-
 
 
 /**
@@ -142,7 +141,6 @@ $TCA['tx_org_pinboard'] = array(
 		),
 		'subtitle'              => $TCA['pages']['columns']['subtitle'],
 		'bodytext'              => $TCA['tt_content']['columns']['bodytext'],
-		'image'                 => $TCA['tt_content']['columns']['image'],
 		'image'                 => $TCA['tt_content']['columns']['image'],
 		'imagewidth'            => $TCA['tt_content']['columns']['imagewidth'],
 		'imageheight'           => $TCA['tt_content']['columns']['imageheight'],
@@ -260,12 +258,8 @@ $TCA['tx_org_pinboard'] = array(
 					media, mediacaption;LLL:EXT:cms/locallang_ttc.xml:imagecaption_formlabel',
 			'canNotCollapse' => 1,
 		),
-		'access' => $TCA['tt_content']['palettes']['access'],
-		'visibility' => array(
-			'showitem'       => '
-					hidden;;',
-			'canNotCollapse' => 1,
-		),
+		'access'     => $TCA['tt_content']['palettes']['access'],
+		'visibility' => $TCA['tx_org_pinboardcat']['palettes']['visibility'],
 	),
 );
 

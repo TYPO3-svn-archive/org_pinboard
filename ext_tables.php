@@ -13,6 +13,7 @@ $orgConfArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['org']);
 $llStatic = ($orgConfArr['LLstatic'] == 'German') ? 'de' : 'default';
 
 
+$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
 $TCA['tx_org_pinboard'] = array(
 	'ctrl' => array(
 		'title'                    => 'LLL:EXT:org_pinboard/locallang_db.xml:tx_org_pinboard',
@@ -38,42 +39,40 @@ $TCA['tx_org_pinboard'] = array(
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboard.gif',
 	),
 );
+if (!empty ($extConf['TCA_datetime_in_enablecolumns'])) {
+	$TCA['tx_org_pinboard']['ctrl']['enablecolumns']['starttime'] = 'datetime';
+}
 
 $TCA['tx_org_pinboardcat'] = array(
 	'ctrl' => array(
-		'title'                    => 'LLL:EXT:org_pinboard/locallang_db.xml:tx_org_pinboardcat',
-		'label'                    => 'title',
-		'tstamp'                   => 'tstamp',
-		'crdate'                   => 'crdate',
-		'cruser_id'                => 'cruser_id',
-		'languageField'            => 'sys_language_uid',
-		'transOrigPointerField'    => 'l10n_parent',
-		'transOrigDiffSourceField' => 'l10n_diffsource',
-		'sortby'                   => 'sorting',
-		'delete'                   => 'deleted',
+		'title'         => 'LLL:EXT:org_pinboard/locallang_db.xml:tx_org_pinboardcat',
+		'label'         => 'title',
+		'tstamp'        => 'tstamp',
+		'crdate'        => 'crdate',
+		'cruser_id'     => 'cruser_id',
+		'sortby'        => 'sorting',
+		'delete'        => 'deleted',
 		'enablecolumns' => array(
 			'disabled'  => 'hidden',
-			'starttime' => 'starttime',
-			'endtime'   => 'endtime',
-			'fe_group'  => 'fe_group',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
+		'hideAtCopy'        => false,
 		'dividers2tabs'     => 1,
-		'requestUpdate'     => 'sys_language_uid',
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
 		'searchFields'      => 'title',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboardcat.gif',
 	),
 );
 
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/base/',     'base');
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/pinboard/', 'pinboard');
+$label = ($llStatic == 'de') ? 'Org: Pinnwand' : 'Org: Pinboard';
+
+##t3lib_extMgm::addStaticFile($_EXTKEY,'static/base/',     'base');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'static/pinboard/', '+' . $label);
 
 
 /**
  * Add pagetree icons
  */
-$label = ($llStatic == 'de') ? 'Org: Pinnwand' : 'Org: Pinboard';
 $type  = 'org_pinnb';
 $TCA['pages']['columns']['module']['config']['items'][] = array(
 	$label,
