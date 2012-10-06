@@ -20,7 +20,7 @@ $TCA['tx_org_pinboardcat'] = array(
 	),
 	'feInterface' => $TCA['tx_org_pinboardcat']['feInterface'],
 	'columns' => array(
-		'sys_language_uid' => $TCA['tt_content']['columns']['sys_language_uid'],
+	#	'sys_language_uid' => $TCA['tt_content']['columns']['sys_language_uid'],
 		'hidden'    => $TCA['tt_content']['columns']['hidden'],
 		'title'     => array(
 			'exclude' => 0,

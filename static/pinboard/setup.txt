@@ -44,12 +44,7 @@ plugin.tx_browser_pi1 {
 					tx_org_pinboardcat.title
 				)
 			##	select := appendString(,tx_org_pinboard.subtitle)
-/*
-				andWhere (
-					(tx_org_pinboard.archivedate = 0
-						OR tx_org_pinboard.archivedate > UNIX_TIMESTAMP())
-				)
-*/
+				andWhere = tx_org_pinboard.archivedate = 0 OR tx_org_pinboard.archivedate > UNIX_TIMESTAMP()
 #andWhere = tx_org_pinboard.archivedate > 1341833219
 				orderBy (
 					tx_org_pinboard.crdate DESC
@@ -200,8 +195,9 @@ plugin.tx_browser_pi1 {
 					tx_org_pinboard.mediacaption,
 					tx_org_pinboardcat.title
 				)
+				andWhere = tx_org_pinboard.archivedate = 0 OR tx_org_pinboard.archivedate > UNIX_TIMESTAMP()
 				tx_org_pinboard {
-					datetime.strftime = %d.%b.%Y, %H:%M
+					datetime.strftime = %d. %b. %Y, %H:%M
 					archivedate.strftime < .datetime.strftime
 						// title, address and image
 					title < tt_content.image.20
