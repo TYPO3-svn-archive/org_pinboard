@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-10-08T06:15:33Z" product-name="org_pinboard">
+		<header/>
+		<body>
+			<trans-unit id="tt_content.list_type_pi1">
+				<source>Organiser Pinboard Entry Approval</source>
+			</trans-unit>
+			<trans-unit id="pi1_title">
+				<source>Organiser Pinboard Entry Approval</source>
+			</trans-unit>
+			<trans-unit id="pi1_plus_wiz_description">
+				<source>Adds a plugin for Pinboard Entry Approval by clicking link in email</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

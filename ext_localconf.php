@@ -4,6 +4,9 @@ if (!defined('TYPO3_MODE')) {
 }
 
 
+t3lib_extMgm::addPItoST43($_EXTKEY, 'pi1/class.tx_orgpinboard_pi1.php', '_pi1', 'list_type', 0);
+
+
 if (TYPO3_MODE != 'BE') {
 	/**
 	 * Hooks for powermail
@@ -12,24 +15,10 @@ if (TYPO3_MODE != 'BE') {
 	$_hookFile = 'EXT:org_pinboard/lib/class.tx_orgpinboard_hooks_powermail_pi1.php';
 	$_hookCall = $_hookFile . ':tx_orgpinboard_hooks_powermail_pi1';
 
-		//  Hook for manipulation of default markers
-		//  Useful if you want to prefill some powermail fields with your own stuff, etc...
-###	$_hookConf['PM_FieldWrapMarkerHook1'][]          = $_hookCall;
-
-		//  Hook for confirmation page
-		//  This hook will be opened before the marker array is substituted with HTML template on the confirmation page
-##	$_hookConf['PM_ConfirmationHook'][]              = $_hookCall;
-
-		//  Hook for markerArray in field generation (inner markerArray for checkboxes, radiobuttons, and so on)
-		//  This hook will be used for every kind of field. You can manipulate the markerArray before the field is generated
-		//  (this hook will be used for innerMarkerArray – checkbox, radiobuttons, etc...)
-##	$_hookConf['PM_FieldWrapMarkerArrayHookInner'][] = $_hookCall;
-
-		//  Hook for manipulation of default markers
-		//  Useful if you want to prefill some powermail fields with your own stuff, etc...:
-##	$_hookConf['PM_FieldWrapMarkerHook1'][]          = $_hookCall;
-
-##	$_hookConf['PM_MarkerArrayHook'][]               = $_hookCall;
+		//  Hook for email change
+		//  This hook allows to change the emails (subject, receiver, sender, etc..)
+		//  Used for filling field `approval_id`
+	$_hookConf['PM_SubmitEmailHook'][]       = $_hookCall;
 
 		//  Submit hook after emails
 		//  If you want to do something after a correct submit, you can use this hook (maybe an additional db entry)

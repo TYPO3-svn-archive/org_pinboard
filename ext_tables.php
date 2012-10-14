@@ -21,9 +21,9 @@ $TCA['tx_org_pinboard'] = array(
 		'tstamp'                   => 'tstamp',
 		'crdate'                   => 'crdate',
 		'cruser_id'                => 'cruser_id',
-		'languageField'            => 'sys_language_uid',
-		'transOrigPointerField'    => 'l10n_parent',
-		'transOrigDiffSourceField' => 'l10n_diffsource',
+	##	'languageField'            => 'sys_language_uid',
+	##	'transOrigPointerField'    => 'l10n_parent',
+	##	'transOrigDiffSourceField' => 'l10n_diffsource',
 		'default_sortby'           => 'ORDER BY crdate DESC',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
@@ -37,6 +37,12 @@ $TCA['tx_org_pinboard'] = array(
 		'requestUpdate'     => 'fe_user',
 		'searchFields'      => 'author,fe_user,title,subtitle,bodytext,imagecaption,altText,titleText,mediaText',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboard.gif',
+		'typeicon_column'   => 'approval',
+		'typeicons'         => array(
+			 1 => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboard_grey.gif',
+			 0 => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboard.gif',
+			-1 => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboard_grey.gif',
+		),
 	),
 );
 if (!empty ($extConf['TCA_datetime_in_enablecolumns'])) {
@@ -81,4 +87,21 @@ $TCA['pages']['columns']['module']['config']['items'][] = array(
 );
 t3lib_SpriteManager::addTcaTypeIcon('pages', 'contains-' . $type,
 		t3lib_extMgm::extRelPath($_EXTKEY) . 'res/ico/icon_tx_org_pinboard.gif');
+
+
+/**
+ * add plugin `pinboard entry approval`
+ */
+t3lib_div::loadTCA('tt_content');
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi1']='layout,select_key';
+
+t3lib_extMgm::addPlugin(array(
+	'LLL:EXT:org_pinboard/locallang.xlf:tt_content.list_type_pi1',
+	$_EXTKEY . '_pi1',
+	t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif',
+), 'list_type');
+
+if (TYPO3_MODE == 'BE') {
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_orgpinboard_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY) . 'pi1/class.tx_orgpinboard_pi1_wizicon.php';
+}
 ?>

@@ -46,6 +46,18 @@
 			<trans-unit id="tx_org_pinboard.tx_org_pinboardcat">
 				<source>Pinboard Category</source>
 			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval" xml:space="preserve">
+				<source>Approval</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval.pending" xml:space="preserve">
+				<source>Needs approval (not published)</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval.approved" xml:space="preserve">
+				<source>Approved (published)</source>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval.rejected" xml:space="preserve">
+				<source>Rejected (not published)</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

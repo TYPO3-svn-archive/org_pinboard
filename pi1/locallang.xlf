@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-06-23T15:28:33Z" product-name="org_pinboard">
+		<header/>
+		<body>
+			<trans-unit id="error.piVarApprovalEmpty">
+				<source>Error: No approval command given</source>
+			</trans-unit>
+			<trans-unit id="error.piVarApprovalInvalid">
+				<source>Error: Invalid approval command given</source>
+			</trans-unit>
+			<trans-unit id="error.piVarApprovalIdEmpty">
+				<source>Error: No entry to approve given</source>
+			</trans-unit>
+			<trans-unit id="error.approval">
+				<source>Error: Approval of this entry failed</source>
+			</trans-unit>
+			<trans-unit id="success.approval.reject">
+				<source>Entry succesfully rejected</source>
+			</trans-unit>
+			<trans-unit id="success.approval.approve">
+				<source>Entry succesfully approved</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

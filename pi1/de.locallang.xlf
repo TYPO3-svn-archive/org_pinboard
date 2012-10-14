@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2012-06-23T15:28:33Z" product-name="org_pinboard">
+		<header/>
+		<body>
+			<trans-unit id="error.piVarApprovalEmpty" approved="yes">
+				<source>Error: No approval command given</source>
+				<target>Fehler: Kein Freigabekommando übergeben</target>
+			</trans-unit>
+			<trans-unit id="error.piVarApprovalInvalid" approved="yes">
+				<source>Error: Invalid approval command given</source>
+				<target>Fehler: Ungültiges Freigabekommando übergeben</target>
+			</trans-unit>
+			<trans-unit id="error.piVarApprovalIdEmpty" approved="yes">
+				<source>Error: No entry to approve given</source>
+				<target>Fehler: Kein Eintrag zur Freigabe übergeben</target>
+			</trans-unit>
+			<trans-unit id="error.approval" approved="yes">
+				<source>Error: Approval of this entry failed</source>
+				<target>Fehler: Freigabe des Eintrags fehlgeschlagen</target>
+			</trans-unit>
+			<trans-unit id="success.approval.reject" approved="yes">
+				<source>Entry succesfully rejected</source>
+				<target>Der Eintrag wurde verworfen.</target>
+			</trans-unit>
+			<trans-unit id="success.approval.approve" approved="yes">
+				<source>Entry succesfully approved</source>
+				<target>Der Eintrag wurde freigegeben.</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

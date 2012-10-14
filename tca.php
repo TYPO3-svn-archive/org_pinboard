@@ -80,12 +80,13 @@ $TCA['tx_org_pinboard'] = array(
 	'ctrl' => $TCA['tx_org_pinboard']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,starttime,endtime,fe_group,datetime,'
-									. 'archivedate,author,fe_user,title,subtitle,bodytext,image,imagecaption,tx_org_pinboardcat',
+									. 'archivedate,author,fe_user,title,subtitle,bodytext,image,imagecaption,tx_org_pinboardcat,under_review',
 	),
 	'feInterface' => $TCA['tx_org_pinboard']['feInterface'],
 	'columns' => array(
+/*
 		'sys_language_uid' => $TCA['tt_content']['columns']['sys_language_uid'],
-		'l10n_parent' => array(		
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude'     => 1,
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
@@ -102,11 +103,12 @@ $TCA['tx_org_pinboard'] = array(
 											. 'AND tx_org_pinboard.sys_language_uid IN (-1,0)',
 			),
 		),
-		'l10n_diffsource' => array(		
+		'l10n_diffsource' => array(
 			'config' => array(
 				'type' => 'passthrough'
 			),
 		),
+*/
 		'hidden'      => $TCA['tt_content']['columns']['hidden'],
 		'fe_group'    => $TCA['tt_content']['columns']['fe_group'],
 		'datetime'    => $TCA['tx_org_news']['columns']['datetime'],
@@ -130,11 +132,11 @@ $TCA['tx_org_pinboard'] = array(
 				),
 			),
 		),
-		'title' => array(		
-			'exclude' => 0,		
+		'title' => array(
+			'exclude' => 0,
 			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.title',
 			'config' => array(
-				'type' => 'input',	
+				'type' => 'input',
 				'size' => '50',
 				'eval' => 'trim,required',
 			),
@@ -160,15 +162,15 @@ $TCA['tx_org_pinboard'] = array(
 		'media'                 => $TCA['tt_content']['columns']['media'],
 		'mediacaption'          => $TCA['tt_content']['columns']['imagecaption'],
 		'tx_org_pinboardcat' => array(
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.category',
-			'config' => array(
-				'type' => 'select',	
+			'exclude' => 0,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.category',
+			'config'  => array(
+				'type' => 'select',
 				'foreign_table' => 'tx_org_pinboardcat',
 				'foreign_table_where' => 'AND tx_org_pinboardcat.pid=###CURRENT_PID### ORDER BY tx_org_pinboardcat.uid',
-				'size' => 10,	
+				'size' => 10,
 				'minitems' => 0,
-				'maxitems' => 99,	
+				'maxitems' => 99,
 				'MM' => 'tx_org_pinboard_tx_org_pinboardcat_mm',
 				'wizards' => array(
 					'_PADDING'  => 2,
@@ -203,6 +205,19 @@ $TCA['tx_org_pinboard'] = array(
 						'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
 					),
 				),
+			),
+		),
+		'approval' => array(
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:org_pinboard/locallang_db.xlf:tx_org_pinboard.approval',
+			'config'  => array(
+				'type'    => 'radio',
+					'items' => array(
+						array('LLL:EXT:org_pinboard/locallang_db.xlf:tx_org_pinboard.approval.pending', 1),
+						array('LLL:EXT:org_pinboard/locallang_db.xlf:tx_org_pinboard.approval.approved', 0),
+						array('LLL:EXT:org_pinboard/locallang_db.xlf:tx_org_pinboard.approval.rejected', -1)
+					),
+				'default' => 0,
 			),
 		),
 	),
@@ -253,12 +268,18 @@ $TCA['tx_org_pinboard'] = array(
 		'image_settings'      => $TCA['tt_content']['palettes']['image_settings'],
 		'imageblock'          => $TCA['tt_content']['palettes']['imageblock'],
 		'textlayout'          => $TCA['tt_content']['palettes']['textlayout'],
-		'media'  => array(
+		'media'      => array(
 			'showitem'       => '
 					media, mediacaption;LLL:EXT:cms/locallang_ttc.xml:imagecaption_formlabel',
 			'canNotCollapse' => 1,
 		),
-		'access'     => $TCA['tt_content']['palettes']['access'],
+		'access'     => array(
+			'showitem'       => '
+					approval,
+					--linebreak--,
+					fe_group;LLL:EXT:cms/locallang_ttc.xml:fe_group_formlabel',
+			'canNotCollapse' => 1,
+		),
 		'visibility' => $TCA['tx_org_pinboardcat']['palettes']['visibility'],
 	),
 );

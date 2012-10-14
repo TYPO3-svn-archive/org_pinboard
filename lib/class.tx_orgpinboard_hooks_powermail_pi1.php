@@ -51,16 +51,128 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 	public $extKey   = 'org_pinboard';                          //  The extension key.
 
 
-##	// -------------------------------------------------------------------------
-##	/**
-##	 * Constructor
-##	 *
-##	 * @return  void
-##	 * @access public
-##	 */
-##	public function __construct() {
-##	###	$this->conf =& $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_browser_pi1.']['extensions.']['tx_orgkeq.'];
-##	}
+	// -------------------------------------------------------------------------
+	/**
+	 * Hook for email change
+	 * This hook allows to change the emails (subject, receiver, sender, etc..)
+	 *
+	 * Used for filling field `approval_id`
+	 *
+	 * @param   string   $subpart:             recipient_mail || sender_mail
+	 * @param   array    $maildata:            mail header data (receiver, subject etc.)
+	 * @param   array    $sessiondata:         value array of current powermail field values
+	 * @param   array    $markerArray:         marker array of current powermail field
+	 * @param   object   $pObj:                parent object
+	 * @return  void
+	 * @access  public
+	 */
+	public function PM_SubmitEmailHook(&$subpart, &$maildata, &$sessiondata, &$markerArray, &$pObj) {
+			//  hook activated?
+		if (empty ($pObj->conf['ext.'][$this->extKey . '.']['hooks.']['PM_SubmitEmailHook'])) {
+			return;
+		}
+
+		$lConf =& $pObj->conf['ext.'][$this->extKey . '.']['hooks.']['PM_SubmitEmailHook.'];
+			//  execute sub function
+		if (!empty ($lConf['function'])) {
+			$functions = t3lib_div::trimExplode(',', $lConf['function']);
+			foreach ($functions as $function) {
+				if (method_exists($this, $function)) {
+					$this->$function($lConf[$function . '.'], $subpart, $maildata, $sessiondata, $markerArray, $pObj);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Calculate random hash identifier and add to session
+	 *
+	 * @param   string   $lConf:               function relevant part of TypoScript config
+	 * @param   string   $subpart:             recipient_mail || sender_mail
+	 * @param   array    $maildata:            mail header data (receiver, subject etc.)
+	 * @param   array    $sessiondata:         value array of current powermail field values
+	 * @param   array    $markerArray:         marker array of current powermail field
+	 * @param   object   $pObj:                parent object
+	 * @return  void
+	 * @access  private
+	 */
+	private function fillApprovalId(&$lConf, &$subpart, &$maildata, &$sessiondata, &$markerArray, &$pObj) {
+			//  only if subpart recipient_mail
+		if ($subpart == 'recipient_mail') {
+				//  sys_registry: get last approval id suffix
+			$registry             = t3lib_div::makeInstance('t3lib_Registry');
+			$lastApprovalIdSuffix = $registry->get($this->prefixId, 'approvalIdSuffix');
+			$lastApprovalIdSuffix = (int)$lastApprovalIdSuffix;
+
+				//  calculate random hash as identifier
+			$approvalId = $lastApprovalIdSuffix . md5($this->extKey . (microtime(TRUE) * 10000));
+			$sessiondata[$lConf['fill']] = $approvalId;
+
+				//  sys_registry: increase last approval id suffix
+			$registry->set($this->prefixId, 'approvalIdSuffix', ($lastApprovalIdSuffix + 1));
+
+
+				// replace marker for approving:
+			if (!empty ($lConf['approve_pid'])) {
+				$linkApprove = $pObj->cObj->typolink(
+					$lConf['approve_approve'],
+					array(
+						'parameter'        => (int)$lConf['approve_pid'],
+						'additionalParams' => '&tx_orgpinboard_pi1[approval]=0&tx_orgpinboard_pi1[approval_id]=' . $sessiondata['approval_id'],
+						'forceAbsoluteUrl' => 1,
+					)
+				);
+				$linkReject = $pObj->cObj->typolink(
+					$lConf['approve_reject'],
+					array(
+						'parameter'        => (int)$lConf['approve_pid'],
+						'additionalParams' => '&tx_orgpinboard_pi1[approval]=-1&tx_orgpinboard_pi1[approval_id]=' . $sessiondata['approval_id'],
+						'forceAbsoluteUrl' => 1,
+					)
+				);
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
+##	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>'; exit;
+##	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>';
+##	echo '<pre><b>$linkApprove @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($linkApprove, 1) . '</pre>';
+##	echo '<pre><b>$linkReject @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($linkReject, 1) . '</pre>';
+}
+				$search  = array(
+					'***ORG_PINNBOARD_APPROVE***',
+					'***ORG_PINNBOARD_REJECT***',
+				);
+				$replace = array(
+					$linkApprove,
+					$linkReject,
+				);
+				$pObj->mailcontent['recipient_mail'] = str_replace($search, $replace, $pObj->mailcontent['recipient_mail']);
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
+##	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>'; exit;
+##	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>'; exit;
+}
+			}
+		}
+	}
+
+	/**
+	 * Clean password field
+	 *
+	 * @param   string   $lConf:               function relevant part of TypoScript config
+	 * @param   string   $subpart:             recipient_mail || sender_mail
+	 * @param   array    $maildata:            mail header data (receiver, subject etc.)
+	 * @param   array    $sessiondata:         value array of current powermail field values
+	 * @param   array    $markerArray:         marker array of current powermail field
+	 * @param   object   $pObj:                parent object
+	 * @return  void
+	 * @access  private
+	 */
+	private function cleanPassword(&$lConf, &$subpart, &$maildata, &$sessiondata, &$markerArray, &$pObj) {
+		$keyField   = 'uid' . $lConf['field'];
+		$keyValue   = $lConf['value'];
+		$cleanField = 'uid' . $lConf['clean'];
+		if ($sessiondata[$keyField] == $keyValue) {
+			$sessiondata[$cleanField] = '';
+		}
+	}
 
 
 	// -------------------------------------------------------------------------
@@ -84,7 +196,14 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 
 		$lConf =& $pObj->conf['ext.'][$this->extKey . '.']['hooks.']['PM_SubmitAfterMarkerHook.'];
 			//  execute sub function
-		$this->$lConf['function']($lConf, $pObj, $markerArray, $sessiondata);
+		if (!empty ($lConf['function'])) {
+			$functions = t3lib_div::trimExplode(',', $lConf['function']);
+			foreach ($functions as $function) {
+				if (method_exists($this, $function)) {
+					$this->$function($lConf, $pObj, $markerArray, $sessiondata);
+				}
+			}
+		}
 ##echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
 ##exit;
 	}
@@ -131,9 +250,12 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 			}
 		}
 
-##echo '<pre><b>$fields_values @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($fields_values, 1) . '</pre>';
-##$sql = $GLOBALS['TYPO3_DB']->INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
-##echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1) . '</pre>';
+#if ($_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+###echo '<pre><b>$fields_values @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($fields_values, 1) . '</pre>';
+#echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>';
+###echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
+#exit;
+#}
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 		$insertId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			//  store new uid in session
@@ -160,6 +282,11 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 			}
 		}
 ##exit;
+
+			//  clear cache of configured pages
+		if (!empty ($lConf['clearPageCacheContent_pidList'])) {
+			$GLOBALS['TSFE']->clearPageCacheContent_pidList($lConf['clearPageCacheContent_pidList']);
+		}
 		}
 
 
@@ -187,125 +314,10 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 		return $value;
 	}
 
-
-
-#	// -------------------------------------------------------------------------
-#	/**
-#	 * Hook for manipulation of default markers
-#	 * Useful if you want to prefill some powermail fields with your own stuff, etc...
-#	 *
-#	 * Used to prefill `datetime` field
-#	 *
-#	 * @param   int      $uid:                 uid current powermail field
-#	 * @param   string   $xml:                 flexform config current powermail field
-#	 * @param   string   $type:                type of current powermail field
-#	 * @param   string   $title:               title of current powermail field
-#	 * @param   array    $markerArray:         marker array of current powermail field
-#	 * @param   array    $piVarsFromSession:   piVars powermail
-#	 * @param   object   $pObj:                parent object
-#	 * @return  void
-#	 * @access public
-#	 */
-#	public function PM_FieldWrapMarkerHook1(&$uid, &$xml, &$type, &$title, &$markerArray, &$piVarsFromSession, &$pObj) {
-##echo '<pre><b>$pObj->conf @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->conf, 1) . '</pre>';
-#	##	$pObj->piVars['uid5'] = time();
-#		if ($uid == 5) {
-###echo '<pre><b>$uid @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($uid, 1) . '</pre>' . LF;
-###echo '<pre><b>$xml @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($xml, 1) . '</pre>' . LF;
-###echo '<pre><b>$type @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($type, 1) . '</pre>' . LF;
-###echo '<pre><b>$title @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($title, 1) . '</pre>' . LF;
-###echo '<pre><b>$piVarsFromSession @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($piVarsFromSession, 1) . '</pre>';
-###echo '<pre><b>$pObj @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj, 1) . '</pre>' . LF;
-#			$markerArray['###VALUE###'] = 'value="' . time() . '"';
-##echo '<pre><b>$piVarsFromSession @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($piVarsFromSession, 1) . '</pre>' . LF;
-##echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>' . LF;
-##exit;
-#		}
-#	}
-#
-#
-#	// -------------------------------------------------------------------------
-#	/**
-#	 * Hook for confirmation page
-#	 * This hook will be opened before the marker array is substituted with HTML template on the confirmation page
-#
-#	 * Used to display real values instead of uids
-#	 *
-#	 * @param   int      $uid:                 uid current powermail field
-#	 * @param   string   $xml:                 flexform config current powermail field
-#	 * @param   string   $type:                type of current powermail field
-#	 * @param   string   $title:               title of current powermail field
-#	 * @param   array    $markerArray:         marker array of current powermail field
-#	 * @param   array    $piVarsFromSession:   piVars powermail
-#	 * @param   object   $pObj:                parent object
-#	 * @return  void
-#	 * @access public
-#	 */
-#	public function PM_ConfirmationHook(&$markerArray, &$pObj) {
-#			//  hook activated?
-#		if (empty ($pObj->conf['ext.']['org_pinboard.']['hooks.']['PM_ConfirmationHook'])) {
-#			return;
-#		}
-#
-#
-#echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>' . LF;
-#echo '<pre><b>$pObj @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj, 1) . '</pre>';
-#exit;
-#	}
-#
-#
-#
-#	// -------------------------------------------------------------------------
-#	/**
-#	 * Hook for manipulation of default markers
-#	 * Useful if you want to prefill some powermail fields with your own stuff, etc...
-#	 *
-#	 * Used to prefill `datetime` field
-#	 *
-#	 * @param   int      $uid:                 uid current powermail field
-#	 * @param   string   $xml:                 flexform config current powermail field
-#	 * @param   string   $type:                type of current powermail field
-#	 * @param   string   $title:               title of current powermail field
-#	 * @param   array    $markerArray:         marker array of current powermail field
-#	 * @param   array    $piVarsFromSession:   piVars powermail
-#	 * @param   object   $pObj:                parent object
-#	 * @return  void
-#	 * @access public
-#	 */
-#	public function PM_markerArrayHook(&$what, &$geoArray, &$markerArray, &$sessiondata, &$tmpl, &$pObj) {
-##echo '<pre><b>$what @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($what, 1) . '</pre>' . LF;
-##echo '<pre><b>$geoArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($geoArray, 1) . '</pre>' . LF;
-##echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>' . LF;
-##echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
-##echo '<pre><b>$tmpl @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($tmpl, 1) . '</pre>' . LF;
-####echo '<pre><b>$pObj @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj, 1) . '</pre>' . LF;
-##exit;
-#	}
-#
-#
-#	// -------------------------------------------------------------------------
-#	/**
-#	 * Hook for markerArray in field generation (inner markerArray for checkboxes, radiobuttons, and so on)
-#	 * This hook will be used for every kind of field. You can manipulate the markerArray before the field is generated
-#	 * (this hook will be used for innerMarkerArray – checkbox, radiobuttons, etc...)
-#	 *
-#	 * Used to prefill `tx_org_pinboardcat` filed
-#	 */
-#	public function PM_FieldWrapMarkerHookInner(&$uid, &$xml, &$type, &$title, &$markerArray, &$piVarsFromSession, &$pObj) {
-####echo# '<pre><b>$uid @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($uid, 1) . '</pre>';
-#####exit;
-###if ($uid == 8) {
-#//localise: $GLOBALS['TSFE']->lang
-###echo '<pre><b>$uid @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($uid, 1) . '</pre>' . LF;
-###echo '<pre><b>$xml @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($xml, 1) . '</pre>' . LF;
-###echo '<pre><b>$type @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($type, 1) . '</pre>' . LF;
-###echo '<pre><b>$title @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($title, 1) . '</pre>' . LF;
-###echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>' . LF;
-###echo '<pre><b>$piVarsFromSession @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($piVarsFromSession, 1) . '</pre>';
-###echo '<pre><b>$pObj @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj, 1) . '</pre>' . LF;
-###exit;
-###}
-#	}
+	private function _setApprovalId(&$fConf, &$sessiondata) {
+		$value = $sessiondata[$fConf['value']];
+		return $value;
+	}
 }
 
 

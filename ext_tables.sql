@@ -26,7 +26,7 @@ CREATE TABLE tx_org_pinboardcat (
 
 #
 # Table structure for table 'tx_org_pinboard_fe_user_mm'
-# 
+#
 #
 CREATE TABLE tx_org_pinboard_fe_user_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE tx_org_pinboard_fe_user_mm (
 
 #
 # Table structure for table 'tx_org_pinboard_tx_org_pinboardcat_mm'
-# 
+#
 #
 CREATE TABLE tx_org_pinboard_tx_org_pinboardcat_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
@@ -96,7 +96,10 @@ CREATE TABLE tx_org_pinboard (
 	media text,
 	mediacaption text,
 	tx_org_pinboardcat int(11) DEFAULT '0' NOT NULL,
-	
+	approval tinyint(3) DEFAULT '0' NOT NULL,
+	approval_id tinytext,
+
 	PRIMARY KEY (uid),
-	KEY parent (pid)
+	KEY parent (pid),
+	KEY approval_id (approval_id(45))
 );

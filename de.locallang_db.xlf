@@ -60,6 +60,22 @@
 				<source>Pinboard Category</source>
 				<target>Pinnwand-Kategorie</target>
 			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval" approved="yes">
+				<source>Approval</source>
+				<target>Freigabe</target>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval.pending" approved="yes">
+				<source>Needs approval (not published)</source>
+				<target>Benötigt Freigabe (nicht veröffentlicht)</target>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval.approved" approved="yes">
+				<source>Approved (published)</source>
+				<target>Freigegeben (veröffentlicht)</target>
+			</trans-unit>
+			<trans-unit id="tx_org_pinboard.approval.rejected" approved="yes">
+				<source>Rejected (not published)</source>
+				<target>Abgelehnt (nicht veröffentlicht)</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
