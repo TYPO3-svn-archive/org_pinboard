@@ -51,8 +51,7 @@ class tx_orgpinboard_pi1 extends tslib_pibase {
 	 */
 	public function main($content, $conf) {
 			//  prepare plugin config
-	##	$this->prepareConfig($conf);
-	##	$this->pi_setPiVarDefaults();
+		$this->conf = $conf;
 		$this->pi_loadLL();
 
 
@@ -101,7 +100,7 @@ class tx_orgpinboard_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	protected function approval() {
-		$table         = 'tx_org_pinboard';
+		$table         = (!empty ($this->conf['table'])) ? $this->conf['table'] : 'tx_org_pinboard';
 		$where         = 'approval_id = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->piVars['approval_id']);
 		$fields_values = array(
 			'approval' => (int)$this->piVars['approval'],

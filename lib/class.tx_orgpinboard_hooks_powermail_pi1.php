@@ -131,12 +131,15 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 					)
 				);
 ## @ToDo: remove debugging
-if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
-##	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>'; exit;
-##	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>';
-##	echo '<pre><b>$linkApprove @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($linkApprove, 1) . '</pre>';
-##	echo '<pre><b>$linkReject @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($linkReject, 1) . '</pre>';
+/*
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176' OR $_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>';
+	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>';
+	echo '<pre><b>$linkApprove @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($linkApprove, 1) . '</pre>';
+	echo '<pre><b>$linkReject @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($linkReject, 1) . '</pre>';
+	exit;
 }
+*/
 				$search  = array(
 					'***ORG_PINNBOARD_APPROVE***',
 					'***ORG_PINNBOARD_REJECT***',
@@ -147,10 +150,13 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 				);
 				$pObj->mailcontent['recipient_mail'] = str_replace($search, $replace, $pObj->mailcontent['recipient_mail']);
 ## @ToDo: remove debugging
-if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
-##	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>'; exit;
-##	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>'; exit;
+/*
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176' OR $_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>';
+	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>';
+	exit;
 }
+*/
 			}
 		}
 	}
@@ -188,13 +194,13 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 	 * @param   array    $markerArray:         marker array of current powermail field
 	 * @param   array    $sessiondata:         value array of current powermail field values
 	 * @return  void
-	 * @access public
+	 * @access  public
 	 */
 	public function PM_SubmitAfterMarkerHook(&$pObj, &$markerArray, &$sessiondata) {
 			//  hook activated?
 		if (empty ($pObj->conf['ext.'][$this->extKey . '.']['hooks.']['PM_SubmitAfterMarkerHook'])) {
 			return;
-	}
+		}
 
 		$lConf =& $pObj->conf['ext.'][$this->extKey . '.']['hooks.']['PM_SubmitAfterMarkerHook.'];
 			//  execute sub function
@@ -206,15 +212,20 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 				}
 			}
 		}
-##echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
-##exit;
+## @ToDo: remove debugging
+/*
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176' OR $_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
+exit;
+}
+*/
 	}
 
 
 	/**
 	 * Entry to `tx_org_pinboard`
 	 *
-	 * @return  void
+	 * @return	void
 	 * @access  private
 	 */
 	private function dbEntryOrgpinboard(&$lConf, &$pObj, &$markerArray, &$sessiondata) {
@@ -253,14 +264,16 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 		}
 
 ## @ToDo: remove debugging
-if ($_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+/*
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176' OR $_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
 ##echo '<pre><b>$fields_values @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($fields_values, 1) . '</pre>';
 ##echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>';
 ##echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
 $sql = $GLOBALS['TYPO3_DB']->INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1) . '</pre>';
-#exit;
+exit;
 }
+*/
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 		$insertId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			//  store new uid in session
@@ -281,11 +294,14 @@ echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1
 					'uid_foreign' => $entries[$sessiondata['uid' . $mmVal['field']]],
 					'sorting'     => 1,
 				);
-if ($_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+## @ToDo: remove debugging
+/*
+if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176' OR $_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
 $sql = $GLOBALS['TYPO3_DB']->INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1) . '</pre>';
 exit;
 }
+*/
 				$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 			}
 		}
@@ -295,7 +311,7 @@ exit;
 		if (!empty ($lConf['clearPageCacheContent_pidList'])) {
 			$GLOBALS['TSFE']->clearPageCacheContent_pidList($lConf['clearPageCacheContent_pidList']);
 		}
-		}
+	}
 
 
 	private function _setHiddenIfGuest(&$fConf, &$sessiondata) {
