@@ -30,7 +30,7 @@ Organiser +Pinboard includes database, TypoScript and HTML templates.',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '0.3.0',
+	'version' => '0.3.1',
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',

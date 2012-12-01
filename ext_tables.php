@@ -104,4 +104,30 @@ t3lib_extMgm::addPlugin(array(
 if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_orgpinboard_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY) . 'pi1/class.tx_orgpinboard_pi1_wizicon.php';
 }
+
+
+
+/**
+ * Add fields to org tables
+ */
+
+t3lib_div::loadTCA('tx_org_cal');
+	//  tx_org_news: add `user_buw_organiser_allow_in_oj`, `user_buw_organiser_display_in_oj`
+$tempColumns = array(
+	'approval' => array(
+		'exclude' => 1,
+		'label'   => 'LLL:EXT:' . $_EXTKEY . '/locallang_db.xlf:tx_org_pinboard.approval',
+		'config'  => array(
+			'type'    => 'radio',
+				'items' => array(
+					array('LLL:EXT:' . $_EXTKEY . '/locallang_db.xlf:tx_org_pinboard.approval.pending', 1),
+					array('LLL:EXT:' . $_EXTKEY . '/locallang_db.xlf:tx_org_pinboard.approval.approved', 0),
+					array('LLL:EXT:' . $_EXTKEY . '/locallang_db.xlf:tx_org_pinboard.approval.rejected', -1)
+				),
+			'default' => 0,
+		),
+	),
+);
+t3lib_extMgm::addTCAcolumns('tx_org_cal', $tempColumns, 1);
+t3lib_extMgm::addToAllTCAtypes('tx_org_cal', 'approval', '', 'after:hidden');
 ?>

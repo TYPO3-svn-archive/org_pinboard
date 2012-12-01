@@ -130,6 +130,7 @@ class tx_orgpinboard_hooks_powermail_pi1 {
 						'forceAbsoluteUrl' => 1,
 					)
 				);
+## @ToDo: remove debugging
 if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 ##	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>'; exit;
 ##	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>';
@@ -145,6 +146,7 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 					$linkReject,
 				);
 				$pObj->mailcontent['recipient_mail'] = str_replace($search, $replace, $pObj->mailcontent['recipient_mail']);
+## @ToDo: remove debugging
 if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 ##	echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>'; exit;
 ##	echo '<pre><b>$pObj->mailcontent @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($pObj->mailcontent, 1) . '</pre>'; exit;
@@ -216,7 +218,7 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 	 * @access  private
 	 */
 	private function dbEntryOrgpinboard(&$lConf, &$pObj, &$markerArray, &$sessiondata) {
-		$table         = 'tx_org_pinboard';
+		$table         = (!empty ($lConf['table'])) ? $lConf['table'] : 'tx_org_pinboard';
 		$fields_values = array(
 			'tstamp' => time(),
 			'crdate' => time(),
@@ -250,12 +252,15 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 			}
 		}
 
-#if ($_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
-###echo '<pre><b>$fields_values @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($fields_values, 1) . '</pre>';
-#echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>';
-###echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
+## @ToDo: remove debugging
+if ($_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+##echo '<pre><b>$fields_values @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($fields_values, 1) . '</pre>';
+##echo '<pre><b>$markerArray @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($markerArray, 1) . '</pre>';
+##echo '<pre><b>$sessiondata @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sessiondata, 1) . '</pre>';
+$sql = $GLOBALS['TYPO3_DB']->INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
+echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1) . '</pre>';
 #exit;
-#}
+}
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 		$insertId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			//  store new uid in session
@@ -276,8 +281,11 @@ if ($_SERVER['REMOTE_ADDR'] == '141.54.175.176') {
 					'uid_foreign' => $entries[$sessiondata['uid' . $mmVal['field']]],
 					'sorting'     => 1,
 				);
-##$sql = $GLOBALS['TYPO3_DB']->INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
-##echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1) . '</pre>';
+if ($_SERVER['REMOTE_ADDR'] == '141.54.158.70') {
+$sql = $GLOBALS['TYPO3_DB']->INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
+echo '<pre><b>$sql @ ' . __FILE__ . '::' . __LINE__ . ':</b> ' . print_r($sql, 1) . '</pre>';
+exit;
+}
 				$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, $no_quote_fields = FALSE);
 			}
 		}

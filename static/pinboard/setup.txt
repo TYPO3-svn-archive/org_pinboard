@@ -44,11 +44,11 @@ plugin.tx_browser_pi1 {
 					tx_org_pinboardcat.title
 				)
 			##	select := appendString(,tx_org_pinboard.subtitle)
+				##	tx_org_pinboard.datetime >= UNIX_TIMESTAMP()  ## datetime: is enable field `starttime` in TCA
 				andWhere (
-					tx_org_pinboard.archivedate = 0 OR tx_org_pinboard.archivedate > UNIX_TIMESTAMP()
+					(tx_org_pinboard.archivedate = 0 OR tx_org_pinboard.archivedate > UNIX_TIMESTAMP())
 					AND tx_org_pinboard.approval = 0
 				)
-#andWhere = tx_org_pinboard.archivedate > 1341833219
 				orderBy (
 					tx_org_pinboard.crdate DESC
 				)

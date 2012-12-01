@@ -103,3 +103,15 @@ CREATE TABLE tx_org_pinboard (
 	KEY parent (pid),
 	KEY approval_id (approval_id(45))
 );
+
+
+
+#
+# Table structure for table 'tx_org_cal'
+#
+CREATE TABLE tx_org_cal (
+	approval tinyint(3) DEFAULT '0' NOT NULL,
+	approval_id tinytext,
+
+	KEY approval_id (approval_id(45))
+);
